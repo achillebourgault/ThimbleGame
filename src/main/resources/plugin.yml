@@ -1,0 +1,4 @@
+name: ThimbleGame
+version: '${project.version}'
+main: fr.achillebourgault.thimblegame.ThimbleGame
+api-version: 1.18
