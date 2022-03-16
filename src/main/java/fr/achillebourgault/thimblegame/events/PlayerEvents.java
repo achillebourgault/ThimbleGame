@@ -67,7 +67,7 @@ public class PlayerEvents implements Listener {
     public void onPlayerClick(PlayerInteractEvent e) {
         Player p = e.getPlayer();
 
-        if (e.getItem().getType() == Material.CHEST) {
+        if (e.getItem() != null && e.getItem().getType() == Material.CHEST) {
             e.setCancelled(true);
             p.openInventory(selectionInventory());
         }
@@ -125,9 +125,18 @@ public class PlayerEvents implements Listener {
     public void onPlayerDie(PlayerDeathEvent e) {
         Player p = e.getEntity();
 
-        if (ThimbleGame.getInstance().manager.getCurrentGameState() == GameState.GAME) {
-            e.setDeathMessage("§f§lLA HONTE");
+        if (ThimbleGame.getInstance().manager.getCurrentGameState() == GameState.GAME && ThimbleGame.getInstance().manager.getPlayers().containsKey(p)) {
             ThimbleGame.getInstance().manager.getPlayers().remove(p);
+            if (ThimbleGame.getInstance().manager.getPlayers().size() > 2)
+                e.setDeathMessage("§e" + p.getName() + " §7est mort ! §9§l" + ThimbleGame.getInstance().manager.getPlayers().size() + " §r§7joueurs restants.");
+            else {
+                e.setDeathMessage("§e" + p.getName() + " §7est mort !");
+                for (Player winner : ThimbleGame.getInstance().manager.getPlayers().keySet()) {
+                    Bukkit.broadcastMessage("§e§l" + winner.getName() + " §r§7a gagné la partie !");
+                    ThimbleGame.getInstance().manager.finishGame();
+                    break;
+                }
+            }
         }
     }
 

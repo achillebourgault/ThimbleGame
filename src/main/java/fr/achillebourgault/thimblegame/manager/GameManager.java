@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -76,9 +77,17 @@ public class GameManager {
         }.runTaskTimer(ThimbleGame.getInstance(), 0, 20L);
     }
 
+    public void finishGame() {
+        int x = -21;
+        int z = 71;
+
+        Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "fill -12 65 71 -21 66 80 minecraft:water");
+    }
+
     public void startGame() {
         this.currentGameState = GameState.GAME;
         for (Player p : this.players.keySet()) {
+            p.getInventory().clear();
             p.teleport(this.basePoint);
             p.playSound(p.getLocation(), Sound.BLOCK_AMETHYST_CLUSTER_PLACE, 1f, 0f);
         }
